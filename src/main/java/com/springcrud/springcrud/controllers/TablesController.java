@@ -18,26 +18,25 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.springcrud.springcrud.model.Tables;
+import com.springcrud.springcrud.repository.TablesRepository;
+
 @SuppressWarnings("unused")
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:5001")
 @RestController
 @RequestMapping("/api")
-public class TestController {
+public class TablesController {
 
-    @GetMapping("/tests")
-    public ResponseEntity<String> tests() {
-        try {
-            return new ResponseEntity<>("This is a test", HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
+    @Autowired
+    TablesRepository tablesRepository;
 
-    @GetMapping("/test/{id}")
-    public ResponseEntity<String> test(@PathVariable("id") String id) {
+    @GetMapping("tables")
+    public ResponseEntity<List<Tables>> getAllTables() {
         try {
-            return new ResponseEntity<>("The id is: " + id, HttpStatus.OK);
+            List<Tables> tables = new ArrayList<Tables>();
+            tablesRepository.findAll().forEach(tables::add);
+            return new ResponseEntity<>(tables, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
